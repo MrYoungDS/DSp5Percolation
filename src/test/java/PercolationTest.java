@@ -15,7 +15,6 @@ import java.io.File;
 import edu.princeton.cs.algs4.In;
 
 public class PercolationTest {
-
     // input file to visualize
     private static final String INPUT_PATH =
             "./percolation-test-files";
@@ -80,19 +79,6 @@ public class PercolationTest {
                 "3, 1 is connected to the top and thus should be full");
     }
 
-    private Percolation generatePercolation(String filename) {
-        In in = new In(INPUT_PATH + "/" + filename);      // input file
-        int n = in.readInt();         // n-by-n percolation system
-        // repeatedly read in sites to open
-        Percolation perc = new Percolation(n);
-        while (!in.isEmpty()) {
-            int i = in.readInt();
-            int j = in.readInt();
-            perc.open(i, j);
-        }
-        return perc;
-    }
-
     @Test
     public void testPercolatesFalse() {
         File folder = new File(INPUT_PATH);
@@ -102,6 +88,10 @@ public class PercolationTest {
             if (file.isFile() &&
                     (file.getName().substring(file.getName().lastIndexOf('.') + 1).equals("txt")))
             {
+                // test singletons separately
+                if (file.getName().equals("input1-no.txt")) {
+                    return;
+                }
                 // check to verify that it is a system that does not percolate
                 if (file.getName().contains("-no") || file.getName().equals("greeting57.txt")
                         || file.getName().equals("heart25.txt"))
@@ -121,6 +111,10 @@ public class PercolationTest {
             if (file.isFile() &&
                     (file.getName().substring(file.getName().lastIndexOf('.') + 1).equals("txt")))
             {
+                // test singletons separately
+                if (file.getName().equals("input1-no.txt")) {
+                    return;
+                }
                 // check to verify that it is a system that percolates
                 if (!file.getName().contains("no") && !file.getName().equals("greeting57.txt") &&
                         !file.getName().equals("heart25.txt"))
@@ -133,9 +127,34 @@ public class PercolationTest {
     }
 
     @Test
+    public void testSingletons() {
+        File folder = new File(INPUT_PATH);
+        for (File file : folder.listFiles()) {
+            if (file.isFile() && file.getName().equals("input1.txt")) {
+                assertTrue(generatePercolation("input1.txt").percolates(), file.getName() + " should percolate");
+            } else if (file.isFile() && file.getName().equals("input1-no.txt")) {
+                assertFalse(generatePercolation("input1-no.txt").percolates(), file.getName() + " should not percolate");
+            }
+        }
+    }
+
+    @Test
     public void testBackwash() {
         Percolation input10 = generatePercolation("input10.txt");
         assertFalse(input10.isFull(10, 1),
                 "Bottom left site is not connected to the top so should not be full");
+    }
+
+    private Percolation generatePercolation(String filename) {
+        In in = new In(INPUT_PATH + "/" + filename);      // input file
+        int n = in.readInt();         // n-by-n percolation system
+        // repeatedly read in sites to open
+        Percolation perc = new Percolation(n);
+        while (!in.isEmpty()) {
+            int i = in.readInt();
+            int j = in.readInt();
+            perc.open(i, j);
+        }
+        return perc;
     }
 }
