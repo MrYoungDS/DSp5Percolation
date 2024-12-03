@@ -6,6 +6,9 @@ you **must** use the provided Union-Find structure, which is described
 in the Week 1 Coursera videos, and available in the `algs4.jar` file,
 the `WeightedQuickUnionUF` class (imported at the top of `Percolation`).
 
+Also, the `connected` method in this class is deprecated. Instead of
+`connected(3, 7)`, for example, you should use `find(3) == find(7)`.
+
 ## Assignment Specification
 http://coursera.cs.princeton.edu/algs4/assignments/percolation.html
 
